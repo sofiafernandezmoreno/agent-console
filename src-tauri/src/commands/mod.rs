@@ -9,6 +9,7 @@ pub mod hooks;
 pub mod identity;
 pub mod inject;
 pub mod jira;
+pub mod kitty;
 pub mod learning;
 pub mod mcp;
 pub mod notes;

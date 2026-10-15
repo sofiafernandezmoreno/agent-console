@@ -128,6 +128,7 @@ pub fn run() {
             commands::project::app_build_info,
             commands::project::read_file_text,
             commands::project::workspace_context,
+            commands::kitty::kitty_launch_agent,
             commands::terminal::term_spawn,
             commands::terminal::term_write,
             commands::terminal::term_resize,

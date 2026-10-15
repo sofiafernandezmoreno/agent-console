@@ -1,4 +1,6 @@
 import type { Project } from "../types/domain";
+import { invoke } from "@tauri-apps/api/core";
+import { useToastStore } from "../stores/toastStore";
 import { Icon } from "../components/Icon";
 import { useChangesStore } from "../stores/changesStore";
 import { useOverlaysStore } from "../stores/overlaysStore";
@@ -19,6 +21,15 @@ export function TopBar({ project }: { project: Project }) {
   const show = useOverlaysStore((s) => s.show);
   const persistTerminals = useTerminalsStore((s) => s.persist);
   const closeProject = useSessionStore((s) => s.closeProject);
+
+  const launchKitty = async (agent: "claude" | "codex") => {
+    try {
+      await invoke("kitty_launch_agent", { agent, directory: project.root });
+      useToastStore.getState().show(`Opened ${agent} in Kitty`, "success");
+    } catch (error) {
+      useToastStore.getState().show(`Could not open Kitty: ${error}`, "error");
+    }
+  };
 
   return (
     <div className="topbar">
@@ -43,6 +54,9 @@ export function TopBar({ project }: { project: Project }) {
       </button>
 
       <span className="spacer" />
+
+      <button className="topbar-icon" onClick={() => void launchKitty("claude")} title="Open Claude in Kitty for this project" aria-label="Open Claude in Kitty">Kitty · Claude</button>
+      <button className="topbar-icon" onClick={() => void launchKitty("codex")} title="Open Codex in Kitty for this project" aria-label="Open Codex in Kitty">Kitty · Codex</button>
 
       <button
         className={`topbar-icon ${rightOpen ? "on" : ""}`}
